@@ -31,12 +31,6 @@ argdefault=()
 argdesc=()
 argflags=()
 
-argrequired=()
-arginput=()
-argoutput=()
-argprivate=()
-argflag=()
-
 argn=${#args[@]}
 for ((argidx=0; argidx<argn; argidx++)) do
     argstring=${args[argidx]}
@@ -48,10 +42,9 @@ for ((argidx=0; argidx<argn; argidx++)) do
     else
         var=${arg[1]}
         if [[ "${var:0:2}" == "--" ]]; then
-            argvar+=("${var:2}")
-        else
-            argvar+=("${var}")
+            var="${var:2}"
         fi
+        argvar+=("${var//[^a-zA-Z_0-9]/_}")
     fi
     argdefault+=("${arg[3]}")
     argdesc+=("${arg[4]}")
@@ -149,7 +142,12 @@ for ((argidx=0; argidx<argn; argidx++)) do
         if [ ${ARGSPEC:0:1} != "-" ]; then
             ARGSPEC=""
         fi
-        LINE="${PREFIX}${ARGSPEC}\"${!argvar[argidx]}\""
+        if [[ ! "${flags[*]}" =~ "flag" ]]; then
+            ARGVAR="\"${!argvar[argidx]}\""
+        else
+            ARGVAR=""
+        fi
+        LINE="${PREFIX}${ARGSPEC}${ARGVAR}"
         COMMENTS+="${LINE}"
         COMMENTS+=$'\n'
     fi
