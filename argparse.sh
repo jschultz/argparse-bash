@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2020 Jonathan Schultz
+# Copyright 2022 Jonathan Schultz
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ while (( "$#" )); do
         if [[ "${argshort[argidx]:0:1}" == "-" || "${arglong[argidx]:0:1}" == "-" ]]; then
             if [[ "$1" == "${argshort[argidx]}" || "$1" == "${arglong[argidx]}" ]]; then
                 if  [[ ! "${flags[*]}" =~ "flag" ]]; then
-                    if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+                    if [ -n "$2" ]; then
                         eval "${argvar[argidx]}=\"$2\""
                         shift 2
                     else
@@ -156,4 +156,3 @@ done
 ######################### END OF ARGUMENT PARSING CODE #########################
 
 # echo "${COMMENTS}" > ${filename%.*}.log
-
