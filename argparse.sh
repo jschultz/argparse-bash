@@ -85,7 +85,7 @@ while (( "$#" )); do
         if [[ "${argshort[argidx]:0:1}" == "-" || "${arglong[argidx]:0:1}" == "-" ]]; then
             if [[ "$1" == "${argshort[argidx]}" || "$1" == "${arglong[argidx]}" ]]; then
                 if  [[ ! "${flags[*]}" =~ "flag" ]]; then
-                    if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+                    if [ -n "$2" ] && [ "${2:0:1}" != "-" ]; then
                         eval "${argvar[argidx]}=\"$2\""
                         shift 2
                     else
