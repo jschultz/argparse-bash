@@ -130,7 +130,8 @@ for ((argidx=0; argidx<argn; argidx++)) do
     fi
 done
 
-COMMENTS=$'################################################################################\n'
+COMMENTS_SEPARATOR=$'################################################################################\n'
+COMMENTS=$COMMENTS_SEPARATOR
 COMMENTS+="# $(basename $0)"
 COMMENTS+=$'\n'
 for ((argidx=0; argidx<argn; argidx++)) do
