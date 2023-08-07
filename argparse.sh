@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2020 Jonathan Schultz
+# Copyright 2022 Jonathan Schultz
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -72,6 +72,9 @@ while (( "$#" )); do
             if [[ "${flags[*]}" =~ "required" ]]; then
                 LINE+=" (required)"
             fi
+            if [[ "${flags[*]}" =~ "deprecated" ]]; then
+                LINE+=" (deprecated)"
+            fi
             if [[ -n "${argdesc[argidx]}" ]]; then
                 LINE+=" - ${argdesc[argidx]}"
             fi
@@ -113,7 +116,11 @@ done
 
 for ((argidx=0; argidx<argn; argidx++)) do
     IFS=',' read -r -a flags <<< "${argflags[argidx]}"
-    if [[ ! -n "${!argvar[argidx]}" ]]; then
+    if [[ -n "${!argvar[argidx]}" ]]; then
+        if [[ "${flags[*]}" =~ "deprecated" ]]; then
+            echo "WARNING: Argument '${arglong[argidx]}' is deprecated" >&2
+        fi
+    else
         if [[ -n "${argdefault[argidx]}" ]]; then
             eval "${argvar[argidx]}=\"${argdefault[argidx]}\""
         elif [[ "${flags[*]}" =~ "required" ]]; then
@@ -156,4 +163,3 @@ done
 ######################### END OF ARGUMENT PARSING CODE #########################
 
 # echo "${COMMENTS}" > ${filename%.*}.log
-
