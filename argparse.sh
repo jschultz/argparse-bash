@@ -89,7 +89,7 @@ while (( "$#" )); do
             if [[ "$1" == "${argshort[argidx]}" || "$1" == "${arglong[argidx]}" ]]; then
                 if  [[ ! "${flags[*]}" =~ "flag" ]]; then
                     if [ -n "$2" ] && [ "${2:0:1}" != "-" ]; then
-                        eval "${argvar[argidx]}=\"$2\""
+                        eval "${argvar[argidx]}=\"${2//\"/\\\"}\""
                         shift 2
                     else
                         echo "Error: Value for '${arglong[argidx]}' is missing" >&2
@@ -103,7 +103,7 @@ while (( "$#" )); do
             fi
         # Positional argument
         elif [[ "${1:0:1}" != "-" && ! -n "${!argvar[argidx]}" ]]; then
-            eval "${argvar[argidx]}=\"$1\""
+            eval "${argvar[argidx]}=\"${1//\"/\\\"}\""
             shift
             break
         fi
@@ -122,7 +122,7 @@ for ((argidx=0; argidx<argn; argidx++)) do
         fi
     else
         if [[ -n "${argdefault[argidx]}" ]]; then
-            eval "${argvar[argidx]}=\"${argdefault[argidx]}\""
+            eval "${argvar[argidx]}=\"${argdefault[argidx]//\"/\\\"}\""
         elif [[ "${flags[*]}" =~ "required" ]]; then
             echo "Missing argument '${arglong[argidx]}'" >&2
             exit 1
